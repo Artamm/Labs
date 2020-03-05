@@ -67,7 +67,7 @@ namespace Labs
             var next = 0;
             while (check)
             {
-                Console.WriteLine("Enter grade #" + (next + 1)+" or stop typing  ");
+                Console.WriteLine("Enter grade #" + (next + 1)+", write random or stop typing  ");
                     var textGrade = Console.ReadLine();
                     if (textGrade != null && textGrade.Equals(""))
                     {
@@ -75,22 +75,42 @@ namespace Labs
                         break;
                     }
 
-                    if (textGrade != null && double.TryParse(textGrade, out double grade))
+                    if (textGrade != null && double.TryParse(textGrade, out double grade) )
                     {
-                        homeworks.Add(grade);
+                        if (grade < 10 & grade > 0)
+                        {
+                            homeworks.Add(grade);
+                            next++;
+                        }
+                    }
+                    if (textGrade.ToUpper().Equals("RANDOM"))
+                    {
+                        var random = new Random();
+                        var randomDouble = Math.Round(random.NextDouble() * 10,2);
+                        homeworks.Add(Math.Round(randomDouble,2));
+                        Console.WriteLine("your random double: " + randomDouble);
                         next++;
                     }
             }
 
-          
-            
-            Console.WriteLine("Enter exam grade:");
+
+            double exam;
+            Console.WriteLine("Enter exam grade or type random");
             var textExam = Console.ReadLine();
-            if (!double.TryParse(textExam, out double exam))
+            if (textExam != null && textExam.ToUpper().Equals("RANDOM"))
+            {
+                Random random = new Random();
+                var randomDouble = random.NextDouble() * 10;
+                 exam = Math.Round(randomDouble,2);
+                Console.WriteLine("Your random double: " + randomDouble);
+
+            }
+            if (!double.TryParse(textExam, out  exam))
             {
                 Console.WriteLine("Wrong type. Exam grade will be 0");
                 exam = 0;
             }
+            
             formatGrades(homeworks);
             var numberHomeworks = homeworks.Count;
             var homeworkArray = new double[numberHomeworks];
