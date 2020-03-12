@@ -105,12 +105,12 @@ namespace Labs
                 Console.WriteLine("Your random double: " + randomDouble);
 
             }
-            if (!double.TryParse(textExam, out  exam))
+            if (!double.TryParse(textExam, out  exam) & !textExam.ToUpper().Equals("RANDOM"))
             {
                 Console.WriteLine("Wrong type. Exam grade will be 0");
                 exam = 0;
             }
-            
+
             formatGrades(homeworks);
             var numberHomeworks = homeworks.Count;
             var homeworkArray = new double[numberHomeworks];
