@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 
 
@@ -19,8 +20,8 @@ namespace Labs
             while (flag)
             {
                 Console.WriteLine("--------------Release v0.1----------------");
-                Console.WriteLine("1.{0}\n2.{1}\n3.{2}\n4.{3}\n{4}\n",
-                    "Create student", "Print students (Average)", "Print students (Median)", "Exit",
+                Console.WriteLine("1.{0}\n2.{1}\n3.{2}\n4.{3}\n 5.{4}\n {5}\n",
+                    "Create student", "Print students (Average)", "Print students (Median)","Read from file", "Exit",
                     "Your choice:");
 
                 var choice = Console.ReadLine();
@@ -43,6 +44,11 @@ namespace Labs
                         break;
                     }
                     case "4":
+                    {
+                        ReadData(students);
+                        break;
+                    }
+                    case "5":
                     {
                         flag = false;
                         break;
@@ -153,7 +159,9 @@ namespace Labs
             dataTable.Columns.Add("Final ponts(Aver.)", typeof(double));
 
             var number = 1;
-            foreach (var student in students)
+
+            List<Student> sorted = students.OrderBy(o => o.Name1).ToList();
+            foreach (var student in sorted)
             {
                 object[] row = {number, student.Name1, student.Surname1, student.FinalResultAverage};
                 dataTable.Rows.Add(row);
@@ -197,6 +205,54 @@ namespace Labs
             }
             Console.WriteLine("-------------------------------------------------------------\n");
             
+        }
+        
+        private  static void ReadData(List<Student> students)
+        {
+            string line = " ";
+            Console.WriteLine("Enter full path to the file for custom file or type students.txt for sample");
+            //Format: C:\\Sample.txt
+            line = Console.ReadLine();
+            
+            try 
+            {
+                StreamReader sr = new StreamReader(line);
+
+                line = sr.ReadLine();
+
+                while (line != null) 
+                {
+                    students.Add(prepareStudent(line));
+                    Console.WriteLine(line);
+                    line = sr.ReadLine();
+                }
+
+                sr.Close();
+                Console.ReadLine();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Exception happened: " + e.Message);
+            }
+            finally 
+            {
+                Console.WriteLine("End of file");
+            }
+        }
+
+        private static Student prepareStudent(string line)
+        {
+            string[] raw = line.Split();
+            List<double> grades = new List<double>();
+            grades.Add(Double.Parse(raw[2]));
+            grades.Add(Double.Parse(raw[3]));
+            grades.Add(Double.Parse(raw[4]));
+            grades.Add(Double.Parse(raw[5]));
+            grades.Add(Double.Parse(raw[6]));
+            
+            double exam = Double.Parse(raw[7]); 
+            
+            return new Student(raw[0],raw[1],grades,exam,grades.ToArray(),GradeMed(grades,exam),GradeAverage(grades,exam)); 
         }
         
     }
