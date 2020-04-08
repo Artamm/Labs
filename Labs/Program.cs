@@ -16,13 +16,24 @@ namespace Labs
 
 
             var students = new List<Student>();
+            var passed = new List<Student>();
+            var failed = new List<Student>();
+
+            Dictionary<string,long> speed = new Dictionary<string, long>();
+            speed.Add("overall_sort", 0);
+            speed.Add("2files_create", 0);
+            speed.Add("sort2files", 0);
+            speed.Add("file_read",0);
+
+
+            
             var flag = true;
 
             while (flag)
             {
-                Console.WriteLine("--------------Release v0.1----------------");
-                Console.WriteLine("1.{0}\n2.{1}\n3.{2}\n4.{3}\n5.{4}\n {5}\n",
-                    "Create student", "Print students (Average)", "Print students (Median)","Read from file", "Exit",
+                Console.WriteLine("--------------Release v0.4----------------");
+                Console.WriteLine("1.{0}\n2.{1}\n3.{2}\n4.{3}\n5.{4}\n6.{5}\n7.{6}\n8.{7}\n9.{8}\n {9}\n",
+                    "Create student", "Print students (Average)", "Print students (Median)","Read from file","Create hundreds","Sort 2 files","Speed Analysis for current list","Speed Analysis for 5 files", "Exit",
                     "Your choice:");
 
                 var choice = Console.ReadLine();
@@ -50,6 +61,29 @@ namespace Labs
                         break;
                     }
                     case "5":
+                    {
+                        methods.createHundreds(10000);
+                        methods.createHundreds(100000);
+                        methods.createHundreds(1000000);
+                        methods.createHundreds(10000000);
+                        break;
+                    }
+                    case "6":
+                    {
+                        methods.Sort2Files(students,speed,passed,failed);
+                        break;
+                    }
+                    case "7":
+                    {
+                        methods.SpeedAnalysis(students,speed,passed,failed);
+                        break;
+                    }
+                    case "8":
+                    {
+                        methods.FivePerformanceTests(students,speed,passed,failed);
+                        break;
+                    }
+                    case "9":
                     {
                         flag = false;
                         break;

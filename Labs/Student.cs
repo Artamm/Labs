@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 
@@ -67,6 +68,18 @@ namespace Labs
         {
             get => finalResultAverage;
             set => finalResultAverage = value;
+        }
+
+        public override string ToString()
+        {
+            
+            List <string> stringGrades = new List<string>();
+            foreach (var grade in grades)
+            {
+                stringGrades.Add(grade.ToString());
+            }
+
+            return this.Name + " " + this.Surname + " " + string.Join(" ", stringGrades.ToArray()) + " " + this.exam;
         }
     }
     
