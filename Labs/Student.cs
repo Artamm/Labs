@@ -13,6 +13,7 @@ namespace Labs
         private List<double> grades;
         private double exam;
         private double[] gradeArray;
+        
         private double finalResultMedian;
         private double finalResultAverage;
 
