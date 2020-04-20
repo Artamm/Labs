@@ -33,7 +33,7 @@ namespace Labs
             {
                 Console.WriteLine("--------------Release v0.4----------------");
                 Console.WriteLine("1.{0}\n2.{1}\n3.{2}\n4.{3}\n5.{4}\n6.{5}\n7.{6}\n8.{7}\n9.{8}\n {9}\n",
-                    "Create student", "Print students (Average)", "Print students (Median)","Read from file","Create hundreds","Sort 2 files","Speed Analysis for current list","Speed Analysis for 5 files", "Exit",
+                    "Create student", "Print students (Average)", "Print students (Median)","Read from file","Create hundreds","Sort 2 files","Speed Analysis for current list","Container Testing", "Exit",
                     "Your choice:");
 
                 var choice = Console.ReadLine();
@@ -80,7 +80,11 @@ namespace Labs
                     }
                     case "8":
                     {
-                        methods.FivePerformanceTests(students,speed,passed,failed);
+                        methods.ContainerTesting("students.txt");
+                        methods.ContainerTesting("10000Students.txt");
+                        methods.ContainerTesting("100000Students.txt");
+                        methods.ContainerTesting("1000000Students.txt");
+
                         break;
                     }
                     case "9":
