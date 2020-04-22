@@ -32,9 +32,13 @@ namespace Labs
             while (flag)
             {
                 Console.WriteLine("--------------Release v1.0----------------");
-                Console.WriteLine("1.{0}\n2.{1}\n3.{2}\n4.{3}\n5.{4}\n6.{5}\n7.{6}\n8.{7}\n9.{8}\n10.{9}\n {10}\n",
-                    "Create student", "Print students (Average)", "Print students (Median)","Read from file","Create hundreds","Sort 2 files","Speed Analysis for current list","Container Testing","Strategies comparison", "Exit",
-                    "Your choice:");
+                Console.WriteLine(
+                    "1.{0}\n2.{1}\n3.{2}\n4.{3}\n5.{4}\n6.{5}\n7.{6}\n8.{7}\n9.{8}\n10.{9}\n11.{10}\n{11}\n",
+                    "Create student", "Print students (Average)", "Print students (Median)", "Read from file",
+                    "Create hundreds", "Sort 2 files",
+                    "Speed Analysis for current list", "Container Testing", "Strategies comparison",
+                    "Five Tests Performance",
+                    "Exit", "Your choice:");
 
                 var choice = Console.ReadLine();
 
@@ -93,6 +97,11 @@ namespace Labs
                         break;
                     }
                     case "10":
+                    {
+                       methods.FivePerformanceTests(students,speed,passed,failed);
+                       break;
+                    }
+                    case "11":
                     {
                         flag = false;
                         break;
