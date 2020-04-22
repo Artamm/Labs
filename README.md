@@ -8,6 +8,7 @@ Integrated development environments module
 ### How to use:
 1. Clone project
 2. Compile & run
+You can skip this steps and just use exe file. It's in the debug folder with sample txt file.
 3. Choose option from the list by typing 1 number. Program doesn't stop if you type wrong char.
 ![](images/image.JPG)
 
