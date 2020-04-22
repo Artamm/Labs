@@ -299,6 +299,45 @@ namespace Labs
             }
         }
 
+        public void Sort2Lists(List<Student> students, Dictionary<string, long> hash
+           )
+        {
+            try
+            {
+                var fileCreation = System.Diagnostics.Stopwatch.StartNew();
+                List<Student> passed = new List<Student>();
+                List<Student> failed = new List<Student>();
+
+                fileCreation.Stop();
+                hash["2files_create"] = fileCreation.ElapsedMilliseconds;
+
+                var separate2Files = System.Diagnostics.Stopwatch.StartNew();
+
+                foreach (var student in students)
+                {
+                    if (student.FinalResultAverage < 5.0)
+                    {
+                        failed.Add(student);
+                    }
+                    else
+                    {
+                        passed.Add(student);
+                    }
+                }
+                
+                separate2Files.Stop();
+                hash["sort2files"] = separate2Files.ElapsedMilliseconds;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("2 Separate lists created");
+            }
+        }
+
         public void Sort2FilesLinkedList(LinkedList<Student> students, Dictionary<string, long> hash)
         {
             LinkedList<Student> failed = new LinkedList<Student>();
@@ -342,6 +381,47 @@ namespace Labs
             finally
             {
                 Console.WriteLine("2 Separate files created");
+            }
+        }
+        
+        
+        public void Sort2ListsLinkedList(LinkedList<Student> students, Dictionary<string, long> hash)
+        {
+           
+            try
+            {
+                var fileCreation = System.Diagnostics.Stopwatch.StartNew();
+            LinkedList<Student> failed = new LinkedList<Student>();
+            LinkedList<Student> passed = new LinkedList<Student>();
+             
+                fileCreation.Stop();
+                hash["2files_create"] = fileCreation.ElapsedMilliseconds;
+
+                var separate2Files = System.Diagnostics.Stopwatch.StartNew();
+
+                foreach (var student in students)
+                {
+                    if (student.FinalResultAverage < 5.0)
+                    {
+                       
+                        failed.AddLast(student);
+                    }
+                    else
+                    {
+                        passed.AddLast(student);
+                    }
+                }
+                
+                separate2Files.Stop();
+                hash["sort2files"] = separate2Files.ElapsedMilliseconds;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("2 Separate lists created");
             }
         }
 
@@ -389,6 +469,47 @@ namespace Labs
             finally
             {
                 Console.WriteLine("2 Separate files created");
+            }
+        }
+        
+        
+        public void Sort2ListsQueue(Queue<Student> students, Dictionary<string, long> hash)
+        {
+            
+            try
+            {
+                var fileCreation = System.Diagnostics.Stopwatch.StartNew();
+
+              Queue<Student> failed = new Queue<Student>();
+                          Queue<Student> passed = new Queue<Student>();
+
+                hash["2files_create"] = fileCreation.ElapsedMilliseconds;
+
+                var separate2Files = System.Diagnostics.Stopwatch.StartNew();
+
+                foreach (var student in students)
+                {
+                    if (student.FinalResultAverage < 5.0)
+                    {
+                        failed.Enqueue(student);
+                    }
+                    else
+                    {
+                        passed.Enqueue(student);
+                    }
+                }
+
+                
+                separate2Files.Stop();
+                hash["sort2files"] = separate2Files.ElapsedMilliseconds;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("2 Separate lists created");
             }
         }
 
@@ -569,7 +690,7 @@ namespace Labs
             var watchLinkedList = System.Diagnostics.Stopwatch.StartNew();
             PrepareLinkedListForTest(linkedList, filePerform, timerLinkedList);
             Sort2FilesLinkedList(linkedList, timerList);
-            
+
             watchLinkedList.Stop();
             timerLinkedList["overall_sort"] = watchLinkedList.ElapsedMilliseconds;
 
@@ -579,10 +700,54 @@ namespace Labs
             Sort2FilesQueue(queue, timerQueue);
             watchQueue.Stop();
             timerQueue["overall_sort"] = watchQueue.ElapsedMilliseconds;
-            
+
             //count is the same for everyone
             int size = list.Count;
-            
+
+            DisplayResult(timerList, size, "list");
+            DisplayResult(timerLinkedList, size, "linked list");
+            DisplayResult(timerQueue, size, "queue");
+        }
+        
+        
+        public void ContainerTestingLists(string filePerform)
+        {
+            LinkedList<Student> linkedList = new LinkedList<Student>();
+            List<Student> list = new List<Student>();
+            Queue<Student> queue = new Queue<Student>();
+
+            Dictionary<string, long> timerLinkedList = PrepareStats();
+            Dictionary<string, long> timerList = PrepareStats();
+            Dictionary<string, long> timerQueue = PrepareStats();
+
+
+            //List
+            var watchList = System.Diagnostics.Stopwatch.StartNew();
+            PrepareListForTest(list, filePerform, timerList);
+            Sort2Lists(list, timerList);
+
+            watchList.Stop();
+            timerList["overall_sort"] = watchList.ElapsedMilliseconds;
+
+
+            //Linked List
+            var watchLinkedList = System.Diagnostics.Stopwatch.StartNew();
+            PrepareLinkedListForTest(linkedList, filePerform, timerLinkedList);
+            Sort2ListsLinkedList(linkedList, timerList);
+
+            watchLinkedList.Stop();
+            timerLinkedList["overall_sort"] = watchLinkedList.ElapsedMilliseconds;
+
+            //Queue
+            var watchQueue = System.Diagnostics.Stopwatch.StartNew();
+            PrepareQueueForTest(queue, filePerform, timerQueue);
+            Sort2ListsQueue(queue, timerQueue);
+            watchQueue.Stop();
+            timerQueue["overall_sort"] = watchQueue.ElapsedMilliseconds;
+
+            //count is the same for everyone
+            int size = list.Count;
+
             DisplayResult(timerList, size, "list");
             DisplayResult(timerLinkedList, size, "linked list");
             DisplayResult(timerQueue, size, "queue");
@@ -597,5 +762,166 @@ namespace Labs
             stats.Add("file_read", 0);
             return stats;
         }
+
+
+        public void CompareStrategies(string filePerform)
+        {
+            //Since used version == the first strategy the function is just repeated here
+            var watch1 = System.Diagnostics.Stopwatch.StartNew();
+
+            Console.WriteLine("-----------Strategy #1-----------");
+            ContainerTestingLists(filePerform);
+            watch1.Stop();
+            var watch2 = System.Diagnostics.Stopwatch.StartNew();
+            Console.WriteLine("-----------Strategy #2-----------");
+            Strategy2(filePerform);
+            watch2.Stop();     
+            Console.WriteLine("Strategy #1 for all containers performed in: {0} seconds \n",watch1.ElapsedMilliseconds);
+
+            Console.WriteLine("Strategy #2 for all containers performed in: {0} seconds \n",watch2.ElapsedMilliseconds);
+
+        }
+
+        private void Strategy2(string filePerform)
+        {
+            Strategy2List(filePerform);
+            Strategy2LinkedList(filePerform);
+            Strategy2Queue(filePerform);
+        }
+
+        private void Strategy2List(string filePerform)
+        {
+            List<Student> list = new List<Student>();
+            Dictionary<string, long> timerList = PrepareStats();
+
+            List<Student> failed = new List<Student>();
+
+            var watchList = System.Diagnostics.Stopwatch.StartNew();
+            PrepareListForTest(list, filePerform, timerList);
+            Console.WriteLine("Student overall list before sort, size " + list.Count);
+            var watchSort = System.Diagnostics.Stopwatch.StartNew();
+            list = list.OrderBy(o => o.FinalResultAverage).ToList();
+
+            int size = list.Count;
+            for (int i = 0; i < size; i++)
+            {
+                if (list[i].FinalResultAverage > 5)
+                {
+                    break;
+                }
+
+                failed.Add(list[i]);
+                list.Remove(list[i]);
+                i = i - 1;
+            }
+
+            watchSort.Stop();
+
+            timerList["sort2files"] = watchSort.ElapsedMilliseconds;
+            watchList.Stop();
+            timerList["overall_sort"] = watchList.ElapsedMilliseconds;
+            Console.WriteLine("------------LIST PERFORMANCE--------------------- ");
+
+
+            Console.WriteLine("Student overall list after sort, size " + list.Count);
+            Console.WriteLine("Student failed list after sort, size " + failed.Count);
+            Console.WriteLine("Everything performed in: {0} seconds ", timerList["overall_sort"]);
+            Console.WriteLine("Sort performed in: {0} seconds ", timerList["sort2files"]);
+            Console.WriteLine("File to list performed in: {0} seconds ", timerList["file_read"]);
+            Console.WriteLine("Failed students from the file: " + filePerform);
+            timerList.Clear();
+          
+
+            Console.WriteLine("-------------------------------------------------\n ");
+        }
+
+        private void Strategy2LinkedList(string filePerform)
+        {
+            LinkedList<Student> linkedList = new LinkedList<Student>();
+            Dictionary<string, long> timerLinkedList = PrepareStats();
+            LinkedList<Student> failed = new LinkedList<Student>();
+
+            var watchList = System.Diagnostics.Stopwatch.StartNew();
+
+            PrepareLinkedListForTest(linkedList, filePerform, timerLinkedList);
+            Console.WriteLine("Student overall list before sort, size " + linkedList.Count);
+
+            var watchSort = System.Diagnostics.Stopwatch.StartNew();
+            linkedList = new LinkedList<Student>(linkedList.OrderBy(o => o.FinalResultAverage));
+
+            IEnumerator<Student> i = linkedList.Where(o => o.FinalResultAverage < 5).GetEnumerator();
+
+            while (i.MoveNext())
+            {
+                failed.AddLast(i.Current);
+            }
+
+            foreach (var student in failed)
+            {
+                linkedList.Remove(student);
+            }
+            StreamWriter swPassed = new StreamWriter("Passed.txt");
+            StreamWriter swFailed = new StreamWriter("Failed.txt");
+            
+            swPassed.Write(linkedList.ToString());
+            swFailed.Write(failed);
+
+            watchSort.Stop();
+            timerLinkedList["sort2files"] = watchSort.ElapsedMilliseconds;
+            watchList.Stop();
+            timerLinkedList["overall_sort"] = watchList.ElapsedMilliseconds;
+            Console.WriteLine("------------LINKED LIST PERFORMANCE--------------------- ");
+
+            Console.WriteLine("Student overall linked list after sort, size " + linkedList.Count);
+            Console.WriteLine("Student failed linked list after sort, size " + failed.Count);
+            Console.WriteLine("Everything performed in: {0} seconds ", timerLinkedList["overall_sort"]);
+            Console.WriteLine("Sort performed in: {0} seconds ", timerLinkedList["sort2files"]);
+            Console.WriteLine("File to linked list performed in: {0} seconds ", timerLinkedList["file_read"]);
+            Console.WriteLine("Failed students from the file: " + filePerform);
+            timerLinkedList.Clear();
+        
+            Console.WriteLine("--------------------------------------------------------\n ");
+        }
+
+        private void Strategy2Queue(string filePerform)
+        {
+            Queue<Student> queue = new Queue<Student>();
+            Dictionary<string, long> timerQueue = PrepareStats();
+            Queue<Student> failed = new Queue<Student>();
+
+            var watchList = System.Diagnostics.Stopwatch.StartNew();
+
+
+            PrepareQueueForTest(queue, filePerform, timerQueue);
+            Console.WriteLine("Student overall list before sort, size " + queue.Count);
+            queue = new Queue<Student>(queue.OrderBy(o => o.FinalResultAverage));
+
+            var watchSort = System.Diagnostics.Stopwatch.StartNew();
+
+            while (queue.Peek().FinalResultAverage < 5)
+            {
+                failed.Enqueue(queue.Dequeue());
+            }
+            
+            watchSort.Stop();
+            watchList.Stop();
+            timerQueue["sort2files"] = watchSort.ElapsedMilliseconds;
+            timerQueue["overall_sort"] = watchList.ElapsedMilliseconds;
+
+            Console.WriteLine("------------QUEUE PERFORMANCE--------------------------- ");
+
+            Console.WriteLine("Student overall linked list after sort, size " + queue.Count);
+            Console.WriteLine("Student failed linked list after sort, size " + failed.Count);
+            Console.WriteLine("Everything performed in: {0} seconds ", timerQueue["overall_sort"]);
+            Console.WriteLine("Sort performed in: {0} seconds ", timerQueue["sort2files"]);
+            Console.WriteLine("File to linked list performed in: {0} seconds ", timerQueue["file_read"]);
+            Console.WriteLine("Failed students from the file: " + filePerform);
+            timerQueue.Clear();
+       
+
+            Console.WriteLine("--------------------------------------------------------\n ");
+        }
+        
+        
     }
 }
