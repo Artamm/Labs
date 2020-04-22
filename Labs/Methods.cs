@@ -299,6 +299,45 @@ namespace Labs
             }
         }
 
+        public void Sort2Lists(List<Student> students, Dictionary<string, long> hash
+           )
+        {
+            try
+            {
+                var fileCreation = System.Diagnostics.Stopwatch.StartNew();
+                List<Student> passed = new List<Student>();
+                List<Student> failed = new List<Student>();
+
+                fileCreation.Stop();
+                hash["2files_create"] = fileCreation.ElapsedMilliseconds;
+
+                var separate2Files = System.Diagnostics.Stopwatch.StartNew();
+
+                foreach (var student in students)
+                {
+                    if (student.FinalResultAverage < 5.0)
+                    {
+                        failed.Add(student);
+                    }
+                    else
+                    {
+                        passed.Add(student);
+                    }
+                }
+                
+                separate2Files.Stop();
+                hash["sort2files"] = separate2Files.ElapsedMilliseconds;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("2 Separate lists created");
+            }
+        }
+
         public void Sort2FilesLinkedList(LinkedList<Student> students, Dictionary<string, long> hash)
         {
             LinkedList<Student> failed = new LinkedList<Student>();
@@ -342,6 +381,47 @@ namespace Labs
             finally
             {
                 Console.WriteLine("2 Separate files created");
+            }
+        }
+        
+        
+        public void Sort2ListsLinkedList(LinkedList<Student> students, Dictionary<string, long> hash)
+        {
+           
+            try
+            {
+                var fileCreation = System.Diagnostics.Stopwatch.StartNew();
+            LinkedList<Student> failed = new LinkedList<Student>();
+            LinkedList<Student> passed = new LinkedList<Student>();
+             
+                fileCreation.Stop();
+                hash["2files_create"] = fileCreation.ElapsedMilliseconds;
+
+                var separate2Files = System.Diagnostics.Stopwatch.StartNew();
+
+                foreach (var student in students)
+                {
+                    if (student.FinalResultAverage < 5.0)
+                    {
+                       
+                        failed.AddLast(student);
+                    }
+                    else
+                    {
+                        passed.AddLast(student);
+                    }
+                }
+                
+                separate2Files.Stop();
+                hash["sort2files"] = separate2Files.ElapsedMilliseconds;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("2 Separate lists created");
             }
         }
 
@@ -389,6 +469,47 @@ namespace Labs
             finally
             {
                 Console.WriteLine("2 Separate files created");
+            }
+        }
+        
+        
+        public void Sort2ListsQueue(Queue<Student> students, Dictionary<string, long> hash)
+        {
+            
+            try
+            {
+                var fileCreation = System.Diagnostics.Stopwatch.StartNew();
+
+              Queue<Student> failed = new Queue<Student>();
+                          Queue<Student> passed = new Queue<Student>();
+
+                hash["2files_create"] = fileCreation.ElapsedMilliseconds;
+
+                var separate2Files = System.Diagnostics.Stopwatch.StartNew();
+
+                foreach (var student in students)
+                {
+                    if (student.FinalResultAverage < 5.0)
+                    {
+                        failed.Enqueue(student);
+                    }
+                    else
+                    {
+                        passed.Enqueue(student);
+                    }
+                }
+
+                
+                separate2Files.Stop();
+                hash["sort2files"] = separate2Files.ElapsedMilliseconds;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("2 Separate lists created");
             }
         }
 
@@ -587,6 +708,50 @@ namespace Labs
             DisplayResult(timerLinkedList, size, "linked list");
             DisplayResult(timerQueue, size, "queue");
         }
+        
+        
+        public void ContainerTestingLists(string filePerform)
+        {
+            LinkedList<Student> linkedList = new LinkedList<Student>();
+            List<Student> list = new List<Student>();
+            Queue<Student> queue = new Queue<Student>();
+
+            Dictionary<string, long> timerLinkedList = PrepareStats();
+            Dictionary<string, long> timerList = PrepareStats();
+            Dictionary<string, long> timerQueue = PrepareStats();
+
+
+            //List
+            var watchList = System.Diagnostics.Stopwatch.StartNew();
+            PrepareListForTest(list, filePerform, timerList);
+            Sort2Lists(list, timerList);
+
+            watchList.Stop();
+            timerList["overall_sort"] = watchList.ElapsedMilliseconds;
+
+
+            //Linked List
+            var watchLinkedList = System.Diagnostics.Stopwatch.StartNew();
+            PrepareLinkedListForTest(linkedList, filePerform, timerLinkedList);
+            Sort2ListsLinkedList(linkedList, timerList);
+
+            watchLinkedList.Stop();
+            timerLinkedList["overall_sort"] = watchLinkedList.ElapsedMilliseconds;
+
+            //Queue
+            var watchQueue = System.Diagnostics.Stopwatch.StartNew();
+            PrepareQueueForTest(queue, filePerform, timerQueue);
+            Sort2ListsQueue(queue, timerQueue);
+            watchQueue.Stop();
+            timerQueue["overall_sort"] = watchQueue.ElapsedMilliseconds;
+
+            //count is the same for everyone
+            int size = list.Count;
+
+            DisplayResult(timerList, size, "list");
+            DisplayResult(timerLinkedList, size, "linked list");
+            DisplayResult(timerQueue, size, "queue");
+        }
 
         private Dictionary<string, long> PrepareStats()
         {
@@ -605,7 +770,7 @@ namespace Labs
             var watch1 = System.Diagnostics.Stopwatch.StartNew();
 
             Console.WriteLine("-----------Strategy #1-----------");
-            ContainerTesting(filePerform);
+            ContainerTestingLists(filePerform);
             watch1.Stop();
             var watch2 = System.Diagnostics.Stopwatch.StartNew();
             Console.WriteLine("-----------Strategy #2-----------");
@@ -695,6 +860,11 @@ namespace Labs
             {
                 linkedList.Remove(student);
             }
+            StreamWriter swPassed = new StreamWriter("Passed.txt");
+            StreamWriter swFailed = new StreamWriter("Failed.txt");
+            
+            swPassed.Write(linkedList.ToString());
+            swFailed.Write(failed);
 
             watchSort.Stop();
             timerLinkedList["sort2files"] = watchSort.ElapsedMilliseconds;
