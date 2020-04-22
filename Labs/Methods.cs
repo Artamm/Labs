@@ -31,7 +31,7 @@ namespace Labs
 
                 if (textGrade != null && double.TryParse(textGrade, out double grade))
                 {
-                    if (grade < 10 & grade > 0)
+                    if (grade <= 10 & grade > 0)
                     {
                         homeworks.Add(grade);
                         next++;
